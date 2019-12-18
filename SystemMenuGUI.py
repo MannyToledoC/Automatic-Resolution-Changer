@@ -1,37 +1,19 @@
-import pystray
-import SystemCommands
-import sys
+import PySimpleGUIQt as sg
 import time
-from pystray import MenuItem as item
-from PIL import Image, ImageDraw
+
+# https://github.com/PySimpleGUI/PySimpleGUI/issues/1965
 
 
 
-state = False
-
-def on_clicked(icon, item):
-    global state
-    state = not item.checked
-
-
-def action(icon):
-    icon.visible = False 
-    icon.stop()
-    sys.exit()
-    pass
-
-def run():
-    
-    height = 512
-    width = 512
-
-    image = Image.new('RGB', (width, height), 'black')
-    dc = ImageDraw.Draw(image)
-    dc.rectangle((width // 2, 0, width, height // 2), fill='red')
-    dc.rectangle((0, height // 2, width // 2, height), fill='red')
-
-    menu = (item('name', action), item('name', action))
-    icon = pystray.Icon("name", image, "title", menu)
-    icon.run()
-
-run()
+def run(window):
+    # tray = sg.SystemTray(menu= ['menu',['Open', ['&Save::KEY', '---', 'Issues', '!Disabled'], 'E&xit']])
+    # tray.ShowMessage('My Message', 'Resolution Manager is now running!')
+    tray = sg.SystemTray(menu= ['menu',['Open', 'E&xit']])
+    while True:
+        time.sleep(0.8)
+        event = tray.Read()
+        print(event)
+        if event == 'Exit':
+            break
+        if event == 'Open' or event == '__ACTIVATED__':
+            window.close()
